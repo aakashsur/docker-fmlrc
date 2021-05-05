@@ -3,7 +3,7 @@ FROM debian:latest
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
-      wget \
+      curl \
       ca-certificates \
       gcc \
       libc-dev && \
@@ -11,10 +11,8 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get clean
 
 RUN cd ~ && \
-    wget https://static.rust-lang.org/dist/rust-1.51.0-aarch64-unknown-linux-gnu.tar.gz && \
-    tar -xzf rust-1.51.0-aarch64-unknown-linux-gnu.tar.gz && \
-    ./rust-1.51.0-aarch64-unknown-linux-gnu/install.sh && \
-    rm -r ~/rust* && \
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
+    . $HOME/.cargo/env && \
     cargo install fmlrc 
   
 ENV PATH="${PATH}:/root/.cargo/bin"
